@@ -7,9 +7,10 @@ if strcmp(recording,'337.xlsx')
     raw = raw(1:31582,:);
 end
 
-raw = raw{cellfun(@(x) strcmp(x, '0'), raw)};
-
-raw(cell2mat(cellfun(@(elem) elem=='0',raw(:,:),'UniformOutput',false))) = {NaN};
+% Replace missing values with nan
+b = cellfun(@num2str,raw,'un',0);
+raw(ismember(b,'0')) = {nan};
+raw(ismember(b,'{}')) = {nan};
 
 dates = unique(raw(2:end,5));
 
