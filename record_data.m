@@ -26,6 +26,9 @@ idx_magnetic = cellfun(@(x) strcmp(x, 'magnetic'), raw(2:end,7));
 idx_screen_state = cellfun(@(x) strcmp(x, 'screenstate'), raw(2:end,7));
 idx_wireless = cellfun(@(x) strcmp(x, 'wireless'), raw(2:end,7));
 
+
+% saving the relevant data for each sensor
+
 raw = raw(2:end,:);
 accelerometer = raw(idx_accelerometer,[5,6,12:14]);
 activity_recognition = raw(idx_activity_recognition,[5,6,10:11]);
@@ -39,6 +42,33 @@ magnetic = raw(idx_magnetic,[5,6,12:14]);
 screen_state = raw(idx_screen_state,[5,6,9]);
 wireless = raw(idx_wireless,[5,6,9]);
 
+%creating features matrix
+features=zeros(1,45);
 
+
+% extracting features from the data
+last_date=accelerometer(1,1);
+day = 1;
+axis_mat=[];
+
+for i= 1: length(accelerometer)
+    date = accelerometer(i,1);
+    axis_vec = [accelerometer(i,3:end)];
+
+    if strcmp(date,last_date)
+        axis_mat = [axis_mat,axis_vec];
+    
+    else
+        
+        axis_acc_mean = mean(axis_mat(:));
+        features(day,1)=axis_acc_mean;
+
+        axis_mat = axis_vec;
+
+        day = day + 1;
+
+    end
+
+    last_date = date;
 
 end
