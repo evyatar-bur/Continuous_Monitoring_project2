@@ -17,8 +17,11 @@ for r=1:length(d)
 
     % Read data from recordings
     recording = strrep(d(r).name,'.label','');
+    
+    % Read data from BHQ recording
+     = record_data(recording);
 
-    [num, txt, raw] = xlsread(recording);
+     
 
 
 
