@@ -3,7 +3,8 @@ close all
 clear
 clc
 
-addpath('C:\dev\Continuous_Monitoring_project2\Data BHQ\')
+cd('C:\dev\Continuous_Monitoring_project2\Data BHQ\')
+addpath('C:\dev\Continuous_Monitoring_project2\')
 
 % Read recordings
 d=dir('*.label.xlsx');
@@ -19,23 +20,21 @@ for r=1:length(d)
     recording = strrep(d(r).name,'.label','');
     
     % Read data from BHQ recording
-     = record_data(recording);
-
-     
-
+    [raw,dates,accelerometer,activity_recognition,battery,bluetooth,calls,...
+    gyroscope,light,location,magnetic,screen_state,wireless] = record_data(recording);
 
 
 
+    
+    disp(recording)
+end
 
-    B=readtable(gyro_file);
-    label_file=strrep(d(r).name,'Acc','Label');
-    C=readtable(label_file);
-    acc_x=A.x_axis_g_;
-    acc_y=A.y_axis_g_;
-    acc_z=A.z_axis_g_;
-    gyro_x=B.x_axis_deg_s_;
-    gyro_y=B.y_axis_deg_s_;
-    gyro_z=B.z_axis_deg_s_;
+
+
+
+
+
+
 
 
 

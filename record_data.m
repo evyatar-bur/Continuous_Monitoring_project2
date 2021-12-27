@@ -1,9 +1,17 @@
 function [raw,dates,accelerometer,activity_recognition,battery,bluetooth,calls,...
     gyroscope,light,location,magnetic,screen_state,wireless] = record_data(recording)
 
-[~ , ~ , raw]=xlsread(recording);
+[~ , ~ , raw] = xlsread(recording);
+
+if strcmp(recording,'337.xlsx')
+    raw = raw(1:31582,:);
+end
+
+raw = raw{cellfun(@(x) strcmp(x, '0'), raw)};
+
+raw(cell2mat(cellfun(@(elem) elem=='0',raw(:,:),'UniformOutput',false))) = {NaN};
+
 dates = unique(raw(2:end,5));
-raw(2:end,6) = erase(raw(2:end,6),'0 days ');
 
 idx_accelerometer = cellfun(@(x) strcmp(x, 'acelerometer'), raw(2:end,7));
 idx_activity_recognition = cellfun(@(x) strcmp(x, 'activity_recognition'), raw(2:end,7));
@@ -29,4 +37,9 @@ location = raw(idx_location,:);
 magnetic = raw(idx_magnetic,:);
 screen_state = raw(idx_screen_state,:);
 wireless = raw(idx_wireless,:);
+
+
+
+
+
 end
