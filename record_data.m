@@ -27,19 +27,17 @@ idx_screen_state = cellfun(@(x) strcmp(x, 'screenstate'), raw(2:end,7));
 idx_wireless = cellfun(@(x) strcmp(x, 'wireless'), raw(2:end,7));
 
 raw = raw(2:end,:);
-accelerometer = raw(idx_accelerometer,:);
-activity_recognition = raw(idx_activity_recognition,:);
-battery = raw(idx_battery,:);
+accelerometer = raw(idx_accelerometer,[5,6,12:14]);
+activity_recognition = raw(idx_activity_recognition,[5,6,10:11]);
+battery = raw(idx_battery,[5,6,10]);
 bluetooth = raw(idx_bluetooth,:);
-calls = raw(idx_calls,:);
-gyroscope = raw(idx_gyroscope,:);
-light = raw(idx_light,:);
-location = raw(idx_location,:);
-magnetic = raw(idx_magnetic,:);
-screen_state = raw(idx_screen_state,:);
-wireless = raw(idx_wireless,:);
-
-
+calls = raw(idx_calls,[5,6,8,9,11]);
+gyroscope = raw(idx_gyroscope,[5,6,12:14]);
+light = raw(idx_light,[5,6,9]);
+location = raw(idx_location,[5,6,10,12:14]);
+magnetic = raw(idx_magnetic,[5,6,12:14]);
+screen_state = raw(idx_screen_state,[5,6,9]);
+wireless = raw(idx_wireless,[5,6,9]);
 
 
 
