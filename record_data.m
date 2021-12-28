@@ -1,5 +1,4 @@
-function [raw,dates,accelerometer,activity_recognition,battery,bluetooth,calls,...
-    gyroscope,light,location,magnetic,screen_state,wireless] = record_data(recording)
+function [features] = record_data(recording)
 
 [~ , ~ , raw] = xlsread(recording);
 
@@ -44,31 +43,34 @@ wireless = raw(idx_wireless,[5,6,9]);
 
 %creating features matrix
 features=zeros(1,45);
+%extracting calls features
+[call_count, call_duration]= our_call_features(calls,dates); 
+features(1)=call_count;
+features(2)=call_duration;
 
-
-% extracting features from the data
-last_date=accelerometer(1,1);
-day = 1;
-axis_mat=[];
-
-for i= 1: length(accelerometer)
-    date = accelerometer(i,1);
-    axis_vec = [accelerometer(i,3:end)];
-
-    if strcmp(date,last_date)
-        axis_mat = [axis_mat,axis_vec];
-    
-    else
-        
-        axis_acc_mean = mean(axis_mat(:));
-        features(day,1)=axis_acc_mean;
-
-        axis_mat = axis_vec;
-
-        day = day + 1;
-
-    end
-
-    last_date = date;
-
-end
+% %% extracting features from the data
+% last_date=accelerometer(1,1);
+% day = 1;
+% axis_mat=[];
+% 
+% for i= 1: length(accelerometer)
+%     date = accelerometer(i,1);
+%     axis_vec = [accelerometer(i,3:end)];
+% 
+%     if strcmp(date,last_date)
+%         axis_mat = [axis_mat,axis_vec];
+%     
+%     else
+%         
+%         axis_acc_mean = mean(axis_mat(:));
+%         features(day,1)=axis_acc_mean;
+% 
+%         axis_mat = axis_vec;
+% 
+%         day = day + 1;
+% 
+%     end
+% 
+%     last_date = date;
+% 
+% end
