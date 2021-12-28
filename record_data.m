@@ -1,4 +1,4 @@
-function [features] = record_data(recording)
+function [features,dates] = record_data(recording)
 
 [~ , ~ , raw] = xlsread(recording);
 
@@ -12,6 +12,11 @@ raw(ismember(b,'0')) = {nan};
 raw(ismember(b,'{}')) = {nan};
 
 dates = unique(raw(2:end,5));
+
+% Sort dates
+[~, idx] = sort(datenum(dates, 'dd/mm/yyyy'), 1, 'ascend');
+dates = dates(idx,:);
+
 
 idx_accelerometer = cellfun(@(x) strcmp(x, 'acelerometer'), raw(2:end,7));
 idx_activity_recognition = cellfun(@(x) strcmp(x, 'activity_recognition'), raw(2:end,7));

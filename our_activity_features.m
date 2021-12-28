@@ -1,4 +1,4 @@
-function [still,on_foot,tilting,vehicle] = our_activity_feature(activity,dates)
+function [still,on_foot,tilting,vehicle] = our_activity_features(activity,dates)
 
 still = nan*zeros(1,length(dates));
 on_foot = nan*zeros(1,length(dates));

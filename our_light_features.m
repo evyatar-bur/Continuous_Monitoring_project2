@@ -8,7 +8,7 @@ for i = 1:length(dates)
     cur_date = dates{i};
     cur_light = light(cellfun(@(x) strcmp(x, cur_date), light(:,1)),:);
     
-    mean_light = cellfun(@(x) mean(x), cur_light(:,3));
+    mean_light(i) = nanmean(cellfun(@(x) nanmean(x), cur_light(:,3)));
 end
 
 end
