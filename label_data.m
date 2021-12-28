@@ -1,4 +1,6 @@
 function [Time,Sleep, WakeUp,Feeling,Activities] = label_data(recording)
+    
+    % Read label data to cell
     [~,~,data]=xlsread(recording);
    
     if strcmp(recording,'340.label.xlsx')
