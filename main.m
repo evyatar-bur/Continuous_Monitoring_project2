@@ -20,8 +20,7 @@ for r=1:length(d)
     recording = strrep(d(r).name,'.label','');
     
     % Read data from BHQ recording
-    [raw,dates,accelerometer,activity_recognition,battery,bluetooth,calls,...
-    gyroscope,light,location,magnetic,screen_state,wireless] = record_data(recording);
+    [record_features] = record_data(recording);
 
     [Time,Sleep, WakeUp,Feeling,Activities] = label_data(d(r).name);
 
