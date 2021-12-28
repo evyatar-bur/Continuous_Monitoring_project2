@@ -22,11 +22,9 @@ for r=1:length(d)
     % Read data from BHQ recording
     [record_features,dates] = record_data(recording);
 
-    [Time,Sleep, WakeUp,Feeling,Activities] = label_data(d(r).name);
+    [label_features] = label_data(d(r).name,dates);
 
 
-
-    
     disp(recording)
 end
 
