@@ -42,11 +42,20 @@ screen_state = raw(idx_screen_state,[5,6,9]);
 wireless = raw(idx_wireless,[5,6,9]);
 
 %creating features matrix
-features=zeros(1,45);
+features=zeros(length(dates),45);
+
 %extracting calls features
 [call_count, call_duration]= our_call_features(calls,dates); 
-features(1)=call_count;
-features(2)=call_duration;
+features(:,1)=call_count;
+features(:,2)=call_duration;
+
+%extracting light features
+[mean_light]= our_light_features(light,dates);
+features(:,3)=mean_light;
+
+%extracting screen state features
+[mean_screen_usage]= our_light_features(light,dates);
+features(:,4)=mean_screen_usage;
 
 % %% extracting features from the data
 % last_date=accelerometer(1,1);
