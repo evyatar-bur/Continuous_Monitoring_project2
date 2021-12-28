@@ -41,6 +41,7 @@ magnetic = raw(idx_magnetic,[5,6,12:14]);
 screen_state = raw(idx_screen_state,[5,6,9]);
 wireless = raw(idx_wireless,[5,6,9]);
 
+%% extracting features from the data
 %creating features matrix
 features=zeros(length(dates),45);
 
@@ -57,7 +58,15 @@ features(:,3)=mean_light;
 [mean_screen_usage]= our_light_features(light,dates);
 features(:,4)=mean_screen_usage;
 
-% %% extracting features from the data
+%extracting activities features
+[still,on_foot,tilting,vehicle]=our_activity_features(activity_recognition,dates);
+features(:,5)=still;
+features(:,6)=on_foot;
+features(:,7)=tilting;
+features(:,8)=vehicle;
+
+
+%% accelerometer features
 % last_date=accelerometer(1,1);
 % day = 1;
 % axis_mat=[];
