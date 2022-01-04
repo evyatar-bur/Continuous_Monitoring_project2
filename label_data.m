@@ -4,7 +4,8 @@ function [label_features] = label_data(recording,dates)
     
     % Read label data to cell
     [~,~,data] = xlsread(recording);
-   
+    
+    % Remove unnecessary nan rows 
     data = data(cellfun('isclass', data(:,1), 'char'),:);
 
     for i = 1:length(dates)

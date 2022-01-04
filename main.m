@@ -3,8 +3,12 @@ close all
 clear
 clc
 
+% Save current directory
+currentFolder = pwd;
+
+% Changing current directory to data folder
 cd('C:\dev\Continuous_Monitoring_project2\Data BHQ\')
-addpath('C:\dev\Continuous_Monitoring_project2\')
+addpath(currentFolder)
 
 % Read recordings
 d=dir('*.label.xlsx');
@@ -29,6 +33,12 @@ for r=1:length(d)
     curr_X = [record_features,label_features];
     curr_Y = label_classifier(dates);
 
+    % Normalize features using first two weeks
+    
+    
+
+
+    % Adding features and labels to the data cells
     X_event{r} = curr_X;
     Y_event{r} = curr_Y;
 
@@ -36,13 +46,7 @@ for r=1:length(d)
 end
 
 
-
-
-
-
-
-
-
+%%
 
 
 
