@@ -32,12 +32,22 @@ for r=1:length(d)
     % Creating feature matrix and label vector
     curr_X = [record_features,label_features];
     curr_Y = label_classifier(dates);
+    
+    % Remove rows with more than 4 nans
+    curr_X(sum(isnan(curr_X),2)>4,:) = [];
 
     % Normalize features using first two weeks
-    
-    
 
-
+    dates = cellfun(@(x) datetime(x,'InputFormat','dd/MM/uuuu'),dates);  % Convert to datetime
+    norm_dates = caldays(between(dates(1),dates,'Days'))<14;             % Take only first two weeks
+    norm_ind = 1:11;                                                     % Features to normalize
+    
+    % finding normalization parameters
+    [~,C,S] = normalize(curr_X(norm_dates,norm_ind));
+    
+    % Normalize with aformentioned parameters
+    curr_X(:,norm_ind) = normalize(curr_X(:,norm_ind),'center',C,'scale',S);
+    
     % Adding features and labels to the data cells
     X_event{r} = curr_X;
     Y_event{r} = curr_Y;
@@ -45,22 +55,7 @@ for r=1:length(d)
     disp(recording)
 end
 
-
-%%
-
-
-
-
-
-%% Extract features
-
-
-
-
-%% Normalize data
-
-
-
+clear r norm_ind label_features 
 
 %% Split to train and Test
 
