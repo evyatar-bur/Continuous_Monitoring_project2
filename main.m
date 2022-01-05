@@ -21,41 +21,42 @@ Y_event = cell(size(d,1),1);    % Label cell
 for r=1:length(d)
 
     % Read data from recordings
-    recording = strrep(d(r).name,'.label','');
+    curr_recording = strrep(d(r).name,'.label','');
     
     % Read data from BHQ recording
-    [record_features,dates] = record_data(recording);
+    [curr_record_features,curr_dates] = record_data(curr_recording);
     
     % Read data from label file
-    [label_features] = label_data(d(r).name,dates);
+    [curr_label_features] = label_data(d(r).name,curr_dates);
     
     % Creating feature matrix and label vector
-    curr_X = [record_features,label_features];
-    curr_Y = label_classifier(dates);
+    curr_X = [curr_record_features,curr_label_features];
+    curr_Y = label_classifier(curr_dates);
     
     % Remove rows with more than 4 nans
+    curr_dates(sum(isnan(curr_X),2)>4) = [];
     curr_X(sum(isnan(curr_X),2)>4,:) = [];
-
+    
     % Normalize features using first two weeks
-
-    dates = cellfun(@(x) datetime(x,'InputFormat','dd/MM/uuuu'),dates);  % Convert to datetime
-    norm_dates = caldays(between(dates(1),dates,'Days'))<14;             % Take only first two weeks
-    norm_ind = 1:11;                                                     % Features to normalize
+    curr_dates = cellfun(@(x) datetime(x,'InputFormat','dd/MM/uuuu'),curr_dates);  % Convert to datetime
+    curr_norm_dates = caldays(between(curr_dates(1),curr_dates,'Days'))<14;             % Take only first two weeks
+    curr_norm_ind = 1:11;                                                     % Features to normalize
     
     % finding normalization parameters
-    [~,C,S] = normalize(curr_X(norm_dates,norm_ind));
+    [~,curr_C,curr_S] = normalize(curr_X(curr_norm_dates,curr_norm_ind));
     
     % Normalize with aformentioned parameters
-    curr_X(:,norm_ind) = normalize(curr_X(:,norm_ind),'center',C,'scale',S);
+    curr_X(:,curr_norm_ind) = normalize(curr_X(:,curr_norm_ind),'center',curr_C,'scale',curr_S);
     
     % Adding features and labels to the data cells
     X_event{r} = curr_X;
     Y_event{r} = curr_Y;
 
-    disp(recording)
+    disp(curr_recording)
 end
 
-clear r norm_ind label_features 
+clear -regexp ^curr;
+clear d currentFolder
 
 %% Split to train and Test
 
