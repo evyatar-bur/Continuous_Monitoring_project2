@@ -18,16 +18,16 @@ Y_event = cell(size(d,1),1);    % Label cell
 
 %% Read data
 
-for r=1:length(d)
+for curr_r=1:length(d)
 
     % Read data from recordings
-    curr_recording = strrep(d(r).name,'.label','');
+    curr_recording = strrep(d(curr_r).name,'.label','');
     
     % Read data from BHQ recording
     [curr_record_features,curr_dates] = record_data(curr_recording);
     
     % Read data from label file
-    [curr_label_features] = label_data(d(r).name,curr_dates);
+    [curr_label_features] = label_data(d(curr_r).name,curr_dates);
     
     % Creating feature matrix and label vector
     curr_X = [curr_record_features,curr_label_features];
@@ -49,19 +49,25 @@ for r=1:length(d)
     curr_X(:,curr_norm_ind) = normalize(curr_X(:,curr_norm_ind),'center',curr_C,'scale',curr_S);
     
     % Adding features and labels to the data cells
-    X_event{r} = curr_X;
-    Y_event{r} = curr_Y;
+    X_event{curr_r} = curr_X;
+    Y_event{curr_r} = curr_Y;
 
     disp(curr_recording)
 end
 
+% Clear unnecessary variables
 clear -regexp ^curr;
 clear d currentFolder
 
 %% Split to train and Test
 
+X_train = cell2mat(X_event(1:14));
+Y_train = cell2mat(Y_event(1:14));
 
+X_test = cell2mat(X_event(15:end));
+Y_test = cell2mat(Y_event(15:end));
 
+clear X_event Y_event;
 
 %% Feature selection
 
