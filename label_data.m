@@ -1,6 +1,6 @@
 function [label_features] = label_data(recording,dates)
     
-    label_features = nan*zeros(size(dates,1),9);
+    label_features = nan*zeros(size(dates,1),10);
     
     % Read label data to cell
     [~,~,data] = xlsread(recording);
@@ -41,10 +41,11 @@ function [label_features] = label_data(recording,dates)
         % Stayed at home
         label_features(i,8) = cellfun(@(x) contains(x, 'נשארתי'), cur_data(1,5));
 
-        % Went out
-        label_features(i,9) = cellfun(@(x) contains(x, 'בילוי'), cur_data(1,5));
+        % Hangout
+        label_features(i,9) = cellfun(@(x) contains(x, 'בילוי')&~contains(x,'מאוחר'), cur_data(1,5));
         
+        % Late hangout
+        label_features(i,10) = cellfun(@(x) contains(x, 'בילוי מאוחר'), cur_data(1,5));
+    
     end
-
-
 end
