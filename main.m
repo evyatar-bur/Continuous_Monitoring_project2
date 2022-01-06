@@ -78,7 +78,6 @@ Y_test = cell2mat(Y_event(15:end));
 X_event = cell2mat(X_event);
 Y_event = cell2mat(Y_event);
 
-
 %% Feature selection
 
 % Calc Relieff weights
@@ -168,9 +167,29 @@ end
 
 clear i j method ind len 
 
+rus_train = X_train(:,best_feature_list_1);
+bag_train = X_train(:,best_feature_list_2);
+
 %% Create model Train/Test
 
+% Define tree tamplate
+t = templateTree('MaxNumSplits',10);
 
+% RUSboost
+
+% Train RUSboost model
+model_RUSboost = fitcensemble(rus_train,Y_train,'method','RUSBoost','NumLearningCycles',100,'Learners',t);
+
+[rus_label,rus_scores] = predict(model_RUSboost,rus_train);
+
+% Compute AUC - PRC
+[X,Y,T,score] = perfcurve(Y_train,rus_scores(:,1),'0','XCrit','tpr','YCrit','ppv');
+
+
+
+
+% Train RUSboost model
+model_Bag = fitcensemble(bag_train,Y_train,'method','Bag','NumLearningCycles',100,'Learners',t);
 
 
 %% Show results
