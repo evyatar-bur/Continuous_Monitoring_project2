@@ -50,27 +50,34 @@ wireless = raw(idx_wireless,[5,6,9]);
 
 %% Extracting features from the data
 % Creating features matrix
-features=zeros(length(dates),8);
+features = zeros(length(dates),11);
 
 % Extracting calls features
-[call_count, call_duration]= our_call_features(calls,dates); 
-features(:,1)=call_count;
-features(:,2)=call_duration;
+[call_count, call_duration] = our_call_features(calls,dates); 
+features(:,1) = call_count;
+features(:,2) = call_duration;
 
 % Extracting light features
-[mean_light]= our_light_features(light,dates);
-features(:,3)=mean_light;
+[mean_light] = our_light_features(light,dates);
+features(:,3) = mean_light;
 
 % Extracting screen state features
-[mean_screen_usage]= our_light_features(light,dates);
-features(:,4)=mean_screen_usage;
+[mean_screen_usage,last_time] = our_screen_feature(screen_state,dates);
+features(:,4) = mean_screen_usage;
+features(:,5) = last_time;
 
 % Extracting activities features
 [still,on_foot,tilting,vehicle]=our_activity_features(activity_recognition,dates);
-features(:,5)=still;
-features(:,6)=on_foot;
-features(:,7)=tilting;
-features(:,8)=vehicle;
+features(:,6)=still;
+features(:,7)=on_foot;
+features(:,8)=tilting;
+features(:,9)=vehicle;
+
+% Extracting battery feature
+features(:,10) = our_battery_features(battery,dates);
+
+% Extracting wifi feature
+features(:,11) = our_wifi_features(wireless,dates);
 
 
 end

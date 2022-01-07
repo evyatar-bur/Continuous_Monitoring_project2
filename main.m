@@ -43,7 +43,7 @@ for curr_r=1:length(d)
     % Normalize features using first two weeks
     curr_dates = cellfun(@(x) datetime(x,'InputFormat','dd/MM/uuuu'),curr_dates);   % Convert to datetime
     curr_norm_dates = caldays(between(curr_dates(1),curr_dates,'Days'))<14;         % Take only first two weeks
-    curr_norm_ind = 1:11;                                                           % Features to normalize
+    curr_norm_ind = 1:14;                                                           % Features to normalize
     
     % finding normalization parameters
     [~,curr_C,curr_S] = normalize(curr_X(curr_norm_dates,curr_norm_ind));
@@ -63,9 +63,9 @@ clear -regexp ^curr;
 clear d currentFolder
 
 % Feature names
-feature_names = {'call count','call dur','mean light','mean screen usage','still'...
-    ,'foot','tilt','vehicle','sleep time','wake up','feeling','study','sport'...
-    ,'family','work/study','stayed home','hangout','late hangout'};
+feature_names = {'call count','call dur','mean light','mean screen usage','Last screen time'...
+    ,'still','foot','tilt','vehicle','mean battery','mean wifi signal','sleep time','wake up'...
+    ,'feeling','study','sport','family','work/study','stayed home','hangout','late hangout'};
 
 %% Split to train and Test
 
@@ -170,7 +170,7 @@ clear i j method ind len
 rus_train = X_train(:,best_feature_list_1);
 bag_train = X_train(:,best_feature_list_2);
 
-%% Create model Train/Test
+%% Create models Train/Test
 
 % Define tree tamplate
 t = templateTree('MaxNumSplits',10);
@@ -188,7 +188,7 @@ model_RUSboost = fitcensemble(rus_train,Y_train,'method','RUSBoost','NumLearning
 
 
 
-% Train RUSboost model
+% Train Bag model
 model_Bag = fitcensemble(bag_train,Y_train,'method','Bag','NumLearningCycles',100,'Learners',t);
 
 
