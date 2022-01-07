@@ -243,7 +243,7 @@ plot([0 1],[0 1])
 plot(X(ind_90_sens),Y(ind_90_sens),'ro')
 xlabel('False positive rate') 
 ylabel('True positive rate')
-title('ROC Curve for Classification with RUSboost',fsprints('AUC = %f',AUC))
+title('ROC Curve for Classification with RUSboost',sprintf('AUC = %f',AUC))
 hold off
 
 %% Create final model from all(!!!) of the data
