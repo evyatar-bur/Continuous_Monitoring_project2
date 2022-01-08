@@ -97,6 +97,29 @@ X_event = X_event(:,ind);
 
 feature_names = feature_names(ind);
 
+% % Calc correlation & Delete corralated features
+for i = 1:size(X_train,2)
+
+    if i<size(X_train,2)
+
+        R = corr(X_train,'type','Spearman');
+        R = R(i,:);
+
+        ind = (abs(R)>0.7 & R~=1);
+
+        X_train(:,ind) = [];
+        X_test(:,ind) = [];
+        X_event(:,ind) = [];
+        feature_names(ind) = [];
+        W(ind) = [];
+    end
+end
+
+% Gplotmatrix - all features
+figure()
+gplotmatrix(X_event,[],Y_event)
+title('Gplotmatrix - all lowly correlated features')
+
 
 %% Forward selection for model 1 - RUSboost
 
