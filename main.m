@@ -100,7 +100,7 @@ feature_names = feature_names(ind);
 
 %% Forward selection for model 1 - RUSboost
 
-best_feature_list_1 = [];
+best_feature_list_1 = [2];
 best_score_1 = 0;
 method = 'ROC'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 
@@ -108,23 +108,23 @@ method = 'ROC'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 [best_feature_list_1,best_score_1] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_1,best_score_1,method,'RUSboost');
 
 % best feature
-disp(['The best feature is number: ',num2str(best_feature_list_1(1)),' - ',feature_names{best_feature_list_1(1)}])
-disp(['The best PRC score is: ',num2str(best_score_1)])
+disp(['The second best feature is number: ',num2str(best_feature_list_1(end)),' - ',feature_names{best_feature_list_1(end)}])
+disp(['The best AUC score is: ',num2str(best_score_1)])
 disp('------------------------------------------')
 
 % Add more features
-for i = 1:9
+for i = 1:8
 
     [best_feature_list_1,best_score_1] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_1,best_score_1,method,'RUSboost');
     disp(['The new best feature is number: ',num2str(best_feature_list_1(end)),' - ',feature_names{best_feature_list_1(end)}])
-    disp(['The best PRC score is: ',num2str(best_score_1)])
+    disp(['The best AUC score is: ',num2str(best_score_1)])
     disp('------------------------------------------')
 
 end
 
 %% Forward selection for model 2 - Random forest
 
-best_feature_list_2 = [];
+best_feature_list_2 = [2];
 best_score_2 = 0;
 method = 'ROC'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 
@@ -132,16 +132,16 @@ method = 'ROC'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 [best_feature_list_2,best_score_2] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_2,best_score_2,method,'Bag');
 
 % best feature
-disp(['The best feature is number: ',num2str(best_feature_list_2(1)),' - ',feature_names{best_feature_list_2(1)}])
-disp(['The best PRC score is: ',num2str(best_score_2)])
+disp(['The second best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
+disp(['The best AUC score is: ',num2str(best_score_2)])
 disp('------------------------------------------')
 
 % Add more features
-for i = 1:9
+for i = 1:8
 
     [best_feature_list_2,best_score_2] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_2,best_score_2,method,'Bag');
     disp(['The new best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
-    disp(['The best PRC score is: ',num2str(best_score_2)])
+    disp(['The best AUC score is: ',num2str(best_score_2)])
     disp('------------------------------------------')
 
 end
@@ -154,9 +154,9 @@ rus_test = X_test(:,best_feature_list_1);
 bag_train = X_train(:,best_feature_list_2);
 bag_test = X_test(:,best_feature_list_2);
 
-%% Create models Train/Test
-
 X_event = X_event(:,best_feature_list_1);
+
+%% Create models Train/Test
 
 % Define tree tamplate
 t = templateTree('MaxNumSplits',10);
@@ -202,7 +202,6 @@ confusionchart(bag_test_mat,bag_test_order)
 title('Confusion matrix - random forest - test')
 
 
-
 %% Choosing and improving RUSboost model
 
 % Hyper parameters
@@ -233,14 +232,16 @@ figure()
 confusionchart(rus_test_mat,rus_test_order)
 title('Confusion matrix - RUSboost - test - default operating point')
 
+%% Find operating points
+
 % Find threshold for 90% sensitivity
-[X,Y,T,AUC,OPTROCPT] = perfcurve(Y_test,test_scores(:,2),1);
+[X,Y,T,AUC,OPTROCPT] = perfcurve(Y_test,test_scores(:,1),0);
 
 ind_90_sens = find(Y>0.9,1,'first');
 T_90_sens = T(ind_90_sens);
 
 % Find threshold for 90% PPV
-[X_ppv,Y_ppv,T_ppv] = perfcurve(Y_test,test_scores(:,2),1,'XCrit','tpr','YCrit','ppv');
+[X_ppv,Y_ppv,T_ppv] = perfcurve(Y_test,test_scores(:,1),0,'XCrit','tpr','YCrit','ppv');
 
 ind_90_ppv = find(Y_ppv>0.9,1,'last');
 T_90_ppv = T(ind_90_ppv);
@@ -250,12 +251,34 @@ plot(X,Y)
 hold on
 plot([0 1],[0 1])
 %plot(OPTROCPT(1),OPTROCPT(2),'bo')
-plot(X(ind_90_sens),Y(ind_90_sens),'ro')
+plot(X(ind_90_sens),Y(ind_90_sens),'r.','MarkerSize',20)
+plot(X(ind_90_ppv),Y(ind_90_ppv),'b.','MarkerSize',20)
 xlabel('False positive rate') 
 ylabel('True positive rate')
 title('ROC Curve for Classification with RUSboost',sprintf('AUC = %f',AUC))
-legend('ROC curve','Random','90% Sensitivity')
+legend('ROC curve','Random','90% Sensitivity','90% PPV','Location','southeast')
 hold off
+
+%% 90% sensitivity prediction
+
+predict_90_sens = double(test_scores(:,1)<=T_90_sens);
+
+[con_mat_90_sens,rus_test_order] = confusionmat(Y_test,predict_90_sens);
+
+figure()
+confusionchart(con_mat_90_sens,rus_test_order)
+title('Confusion matrix - 90% Sensitivity operating point')
+
+%% 90% PPV prediction
+
+predict_90_ppv = double(test_scores(:,1)<=T_90_ppv);
+
+[con_mat_90_ppv,rus_test_order] = confusionmat(Y_test,predict_90_ppv);
+
+figure()
+confusionchart(con_mat_90_ppv,rus_test_order)
+title('Confusion matrix - 90% PPV operating point')
+
 
 %% Create final model from all(!!!) of the data
 final_model = fitcensemble(X_event,Y_event,'method','RUSBoost','NumLearningCycles',100,'Learners',t,'LearnRate',learning_rate);

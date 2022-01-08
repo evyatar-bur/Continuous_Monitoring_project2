@@ -25,11 +25,11 @@ for i = 1:size(X_training,2)
     
     if strcmp(metric,'ROC')
         % Compute AUC - ROC
-        [~,~,~,score] = perfcurve(Y_test,scores(:,2),1);
+        [~,~,~,score] = perfcurve(Y_test,scores(:,1),0);
 
     elseif strcmp(metric,'PRC')
         % Compute AUC - PRC
-        [~,~,~,score] = perfcurve(Y_test,scores(:,2),1,'XCrit','tpr','YCrit','ppv');
+        [~,~,~,score] = perfcurve(Y_test,scores(:,1),0,'XCrit','tpr','YCrit','ppv');
 
     elseif strcmp(metric,'F1')
 
