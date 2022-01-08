@@ -156,6 +156,8 @@ bag_test = X_test(:,best_feature_list_2);
 
 %% Create models Train/Test
 
+X_event = X_event(:,best_feature_list_1);
+
 % Define tree tamplate
 t = templateTree('MaxNumSplits',10);
 
@@ -225,25 +227,34 @@ model_RUSboost = fitcensemble(rus_train,Y_train,'method','RUSBoost','NumLearning
 % Show confusion matrix
 figure()
 confusionchart(rus_train_mat,rus_train_order)
-title('Confusion matrix - RUSboost - train')
+title('Confusion matrix - RUSboost - train - default operating point')
 
 figure()
 confusionchart(rus_test_mat,rus_test_order)
-title('Confusion matrix - RUSboost - test')
+title('Confusion matrix - RUSboost - test - default operating point')
 
 % Find threshold for 90% sensitivity
 [X,Y,T,AUC,OPTROCPT] = perfcurve(Y_test,test_scores(:,2),1);
 
 ind_90_sens = find(Y>0.9,1,'first');
+T_90_sens = T(ind_90_sens);
+
+% Find threshold for 90% PPV
+[X_ppv,Y_ppv,T_ppv] = perfcurve(Y_test,test_scores(:,2),1,'XCrit','tpr','YCrit','ppv');
+
+ind_90_ppv = find(Y_ppv>0.9,1,'last');
+T_90_ppv = T(ind_90_ppv);
 
 figure()
 plot(X,Y)
 hold on
 plot([0 1],[0 1])
+%plot(OPTROCPT(1),OPTROCPT(2),'bo')
 plot(X(ind_90_sens),Y(ind_90_sens),'ro')
 xlabel('False positive rate') 
 ylabel('True positive rate')
 title('ROC Curve for Classification with RUSboost',sprintf('AUC = %f',AUC))
+legend('ROC curve','Random','90% Sensitivity')
 hold off
 
 %% Create final model from all(!!!) of the data
