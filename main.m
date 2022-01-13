@@ -187,7 +187,7 @@ X_final = X_event(:,best_feature_list_1);
 
 % Gplotmatrix - 5 features
 figure()
-gplotmatrix(X_event(:,1:5),[],Y_event)
+gplotmatrix(X_final(:,1:5),[],Y_event)
 title('Gplotmatrix - 5 best features')
 
 %% Create models Train/Test
@@ -243,15 +243,14 @@ title('Confusion matrix - random forest - test')
 %% Choosing and improving RUSboost model
 
 % Hyper parameters
-learning_rate = 0.1;
-learn_cycles = 100;
+learning_rate = 0.2;
+learn_cycles = 500;
 
 % Define tree tamplate
-t = templateTree('MaxNumSplits',5);
-
+t = templateTree('MaxNumSplits',1);
 
 %% Train RUSboost model 
-model_RUSboost = fitcensemble(rus_train,Y_train,'method','RUSBoost','NumLearningCycles',learn_cycles,'Learners',t);
+model_RUSboost = fitcensemble(X_final,Y_event,'method','RUSBoost','NumLearningCycles',learn_cycles,'Learners',t);
 
 % Predict
 [rus_predict_train,train_scores] = predict(model_RUSboost,rus_train);
@@ -288,7 +287,6 @@ figure()
 plot(X,Y)
 hold on
 plot([0 1],[0 1])
-%plot(OPTROCPT(1),OPTROCPT(2),'bo')
 plot(X(ind_90_sens),Y(ind_90_sens),'r.','MarkerSize',20)
 plot(X(ind_90_ppv),Y(ind_90_ppv),'b.','MarkerSize',20)
 xlabel('False positive rate') 
@@ -321,5 +319,5 @@ title('Confusion matrix - 90% PPV operating point')
 %% Create final model from all of the data
 final_model = fitcensemble(X_final,Y_event,'method','RUSBoost','NumLearningCycles',100,'Learners',t,'LearnRate',learning_rate);
 
-save('RUSboost_model.mat','final_model')
+%save('RUSboost_model.mat','final_model')
 
