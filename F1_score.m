@@ -21,5 +21,5 @@ score_1 = (2 * precision_1 * recall_1) / (precision_1 + recall_1);
 
 
 % Compute weighted score
-score = 0.2*score_0 + 0.8*score_1;
+score = 0.3*score_0 + 0.7*score_1;
 end

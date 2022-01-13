@@ -10,6 +10,10 @@ for i = 1:length(dates)
      
     call_count(i,1) = size(cur_calls,1);
     call_duration(i,1) = nansum(cellfun(@(x) str2double(x), cur_calls(:,4)));
+
+    if isnan(call_duration(i,1))
+        call_duration(i,1) = 0;
+    end
 end
 
 

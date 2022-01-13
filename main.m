@@ -48,11 +48,11 @@ for curr_r=1:length(d)
 
     nan_del_count = nan_del_count + (curr_length - length(curr_dates));
 
-   
+  
     % Normalize features using first two weeks
     curr_dates = cellfun(@(x) datetime(x,'InputFormat','dd/MM/uuuu'),curr_dates);   % Convert to datetime
     curr_norm_dates = caldays(between(curr_dates(1),curr_dates,'Days'))<14;         % Take only first two weeks
-    curr_norm_ind = 1:15;                                                           % Features to normalize
+    curr_norm_ind = 1:16;                                                           % Features to normalize
     
     % finding normalization parameters
     [~,curr_C,curr_S] = normalize(curr_X(curr_norm_dates,curr_norm_ind));
@@ -72,8 +72,8 @@ clear -regexp ^curr;
 clear d currentFolder
 
 % Feature names
-feature_names = {'call count','call dur','mean light','mean screen usage','Last screen time'...
-    ,'still','foot','tilt','vehicle','mean battery','mean wifi signal','sleep time','wake up'...
+feature_names = {'call count','call dur','mean light','mean light night','mean screen usage','Last screen time'...
+    ,'mean screen night','still','foot','tilt','vehicle','mean battery','sleep time','wake up'...
     ,'total sleep','feeling','study','sport','family','work/study','stayed home','hangout','late hangout'};
 
 %% Split to train and Test
@@ -318,8 +318,8 @@ confusionchart(con_mat_90_ppv,rus_test_order)
 title('Confusion matrix - 90% PPV operating point')
 
 
-%% Create final model from all(!!!) of the data
-final_model = fitcensemble(X_event,Y_event,'method','RUSBoost','NumLearningCycles',100,'Learners',t,'LearnRate',learning_rate);
+%% Create final model from all of the data
+final_model = fitcensemble(X_final,Y_event,'method','RUSBoost','NumLearningCycles',100,'Learners',t,'LearnRate',learning_rate);
 
-
+save('RUSboost_model.mat','final_model')
 

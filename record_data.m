@@ -37,20 +37,21 @@ raw = raw(2:end,:);
 activity_recognition = raw(idx_activity_recognition,[5,6,10:11]);
 calls = raw(idx_calls,[5,6,8,9,11]);
 light = raw(idx_light,[5,6,9]);
+battery = raw(idx_battery,[5,6,9,10]);
+screen_state = raw(idx_screen_state,[5,6,9]);
 
 % Not used yet
 accelerometer = raw(idx_accelerometer,[5,6,12:14]);
-battery = raw(idx_battery,[5,6,10]);
 bluetooth = raw(idx_bluetooth,:);
 gyroscope = raw(idx_gyroscope,[5,6,12:14]);
 location = raw(idx_location,[5,6,10,12:14]);
 magnetic = raw(idx_magnetic,[5,6,12:14]);
-screen_state = raw(idx_screen_state,[5,6,9]);
 wireless = raw(idx_wireless,[5,6,9]);
+
 
 %% Extracting features from the data
 % Creating features matrix
-features = zeros(length(dates),11);
+features = zeros(length(dates),12);
 
 % Extracting calls features
 [call_count, call_duration] = our_call_features(calls,dates); 
@@ -58,26 +59,24 @@ features(:,1) = call_count;
 features(:,2) = call_duration;
 
 % Extracting light features
-[mean_light] = our_light_features(light,dates);
+[mean_light,mean_light_night] = our_light_features(light,dates);
 features(:,3) = mean_light;
+features(:,4) = mean_light_night;
 
 % Extracting screen state features
-[mean_screen_usage,last_time] = our_screen_feature(screen_state,dates);
-features(:,4) = mean_screen_usage;
-features(:,5) = last_time;
+[mean_screen_usage,last_time,mean_screen_night] = our_screen_feature(screen_state,dates);
+features(:,5) = mean_screen_usage;
+features(:,6) = last_time;
+features(:,7) = mean_screen_night;
 
 % Extracting activities features
 [still,on_foot,tilting,vehicle]=our_activity_features(activity_recognition,dates);
-features(:,6)=still;
-features(:,7)=on_foot;
-features(:,8)=tilting;
-features(:,9)=vehicle;
+features(:,8)=still;
+features(:,9)=on_foot;
+features(:,10)=tilting;
+features(:,11)=vehicle;
 
 % Extracting battery feature
-features(:,10) = our_battery_features(battery,dates);
-
-% Extracting wifi feature
-features(:,11) = our_wifi_features(wireless,dates);
-
+features(:,12) = our_battery_features(battery,dates);
 
 end
