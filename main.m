@@ -217,10 +217,10 @@ title('Confusion matrix - RUSboost - test')
 
 %% Train Bag model
 % Define tree tamplate
-t = templateTree('MaxNumSplits',100);
+t = templateTree('MaxNumSplits',100,'Prune','on');
 
 
-model_Bag = fitcensemble(bag_train,Y_train,'method','Bag','Learners',t);
+model_Bag = fitcensemble(bag_train,Y_train,'method','Bag','Learners',t,'NumLearningCycles',50);
 
 % Predict
 bag_predict_train = predict(model_Bag,bag_train);
