@@ -156,7 +156,7 @@ best_score_2 = 0;
 method = 'F1'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 
 % Find best feature
-[best_feature_list_2,best_score_2] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_2,best_score_2,method,'Bag');
+[best_feature_list_2,best_score_2] = Add_feature(X_train,Y_train,best_feature_list_2,best_score_2,method,'Bag');
 
 % best feature
 disp(['The best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
@@ -166,7 +166,7 @@ disp('------------------------------------------')
 % Add more features
 for i = 1:9
 
-    [best_feature_list_2,best_score_2] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_2,best_score_2,method,'Bag');
+    [best_feature_list_2,best_score_2] = Add_feature(X_train,Y_train,best_feature_list_2,best_score_2,method,'Bag');
     disp(['The new best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
     disp(['The best score is: ',num2str(best_score_2)])
     disp('------------------------------------------')
