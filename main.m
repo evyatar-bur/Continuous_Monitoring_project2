@@ -3,6 +3,8 @@ close all
 clear
 clc
 
+rng('default')
+
 nan_del_count = 0;
 
 % Save current directory
@@ -125,48 +127,48 @@ end
 
 %% Forward selection for model 1 - RUSboost
 
-best_feature_list_1 = [2];
+best_feature_list_1 = [];
 best_score_1 = 0;
-method = 'ROC'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
+method = 'F1'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 
 % Find best feature
-[best_feature_list_1,best_score_1] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_1,best_score_1,method,'RUSboost');
+[best_feature_list_1,best_score_1] = Add_feature(X_train,Y_train,best_feature_list_1,best_score_1,method,'RUSboost');
 
 % best feature
-disp(['The second best feature is number: ',num2str(best_feature_list_1(end)),' - ',feature_names{best_feature_list_1(end)}])
-disp(['The best AUC score is: ',num2str(best_score_1)])
+disp(['The best feature is number: ',num2str(best_feature_list_1(end)),' - ',feature_names{best_feature_list_1(end)}])
+disp(['The best score is: ',num2str(best_score_1)])
 disp('------------------------------------------')
 
 % Add more features
-for i = 1:8
+for i = 1:9
 
-    [best_feature_list_1,best_score_1] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_1,best_score_1,method,'RUSboost');
+    [best_feature_list_1,best_score_1] = Add_feature(X_train,Y_train,best_feature_list_1,best_score_1,method,'RUSboost');
     disp(['The new best feature is number: ',num2str(best_feature_list_1(end)),' - ',feature_names{best_feature_list_1(end)}])
-    disp(['The best AUC score is: ',num2str(best_score_1)])
+    disp(['The best score is: ',num2str(best_score_1)])
     disp('------------------------------------------')
 
 end
 
 %% Forward selection for model 2 - Random forest
 
-best_feature_list_2 = [2];
+best_feature_list_2 = [];
 best_score_2 = 0;
-method = 'ROC'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
+method = 'F1'; % 'F1', 'ROC' or 'PRC' (F1 will not work)'
 
 % Find best feature
 [best_feature_list_2,best_score_2] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_2,best_score_2,method,'Bag');
 
 % best feature
-disp(['The second best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
-disp(['The best AUC score is: ',num2str(best_score_2)])
+disp(['The best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
+disp(['The best score is: ',num2str(best_score_2)])
 disp('------------------------------------------')
 
 % Add more features
-for i = 1:8
+for i = 1:9
 
     [best_feature_list_2,best_score_2] = Add_feature(X_train,X_test,Y_train,Y_test,best_feature_list_2,best_score_2,method,'Bag');
     disp(['The new best feature is number: ',num2str(best_feature_list_2(end)),' - ',feature_names{best_feature_list_2(end)}])
-    disp(['The best AUC score is: ',num2str(best_score_2)])
+    disp(['The best score is: ',num2str(best_score_2)])
     disp('------------------------------------------')
 
 end
@@ -179,7 +181,7 @@ rus_test = X_test(:,best_feature_list_1);
 bag_train = X_train(:,best_feature_list_2);
 bag_test = X_test(:,best_feature_list_2);
 
-X_event = X_event(:,best_feature_list_1);
+X_final = X_event(:,best_feature_list_1);
 
 %% G-plotmatrix
 

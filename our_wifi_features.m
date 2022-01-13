@@ -1,6 +1,6 @@
 function [mean_wifi] = our_wifi_features(wifi,dates)
 
-mean_wifi = nan*zeros(1,length(dates));
+mean_wifi = zeros(1,length(dates));
 
 for i = 1:length(dates)
     
