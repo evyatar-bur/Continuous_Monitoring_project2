@@ -3,16 +3,16 @@ close all
 clear
 clc
 
-rng('default')
-
-nan_del_count = 0;
-
 % Save current directory
 currentFolder = pwd;
 
 % Changing current directory to data folder
 cd('C:\dev\Continuous_Monitoring_project2\Data BHQ\')
 addpath(currentFolder)
+
+rng('default')
+
+nan_del_count = 0;
 
 % Read recordings
 d=dir('*.label.xlsx');
