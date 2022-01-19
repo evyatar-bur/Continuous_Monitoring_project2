@@ -38,7 +38,7 @@ for curr_r=1:length(d)
     curr_X = [curr_record_features,curr_label_features];
     curr_Y = label_classifier(curr_dates);
     
-    % Remove rows with more than 4 nans
+    % Remove rows with more than 5 nans
     curr_ind = sum(isnan(curr_X),2)>5;
     
     curr_length = length(curr_dates);
