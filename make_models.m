@@ -13,6 +13,7 @@ addpath(currentFolder)
 rng('default')
 
 nan_del_count = 0;
+deleted_labels = [];
 
 % Read recordings
 d=dir('*.label.xlsx');
@@ -42,6 +43,7 @@ for curr_r=1:length(d)
     
     curr_length = length(curr_dates);
 
+    deleted_labels = [deleted_labels; curr_Y(curr_ind)];
     curr_dates(curr_ind) = [];
     curr_X(curr_ind,:) = [];
     curr_Y(curr_ind) = [];

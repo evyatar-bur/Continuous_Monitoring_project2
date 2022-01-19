@@ -32,11 +32,11 @@ for curr_r=1:length(d)
     curr_Y = label_classifier(curr_dates);
     
     % Remove rows with more than 4 nans
-    curr_ind = sum(isnan(curr_X),2)>5;  %% Keep or delete? %%
+    curr_ind = sum(isnan(curr_X),2)>5; 
     
-    curr_dates(curr_ind) = [];          %% Keep or delete? %%
-    curr_X(curr_ind,:) = [];            %% Keep or delete? %%
-    curr_Y(curr_ind) = [];              %% Keep or delete? %%
+    curr_dates(curr_ind) = [];    
+    curr_X(curr_ind,:) = [];          
+    curr_Y(curr_ind) = [];             
 
     % Normalize features using first two weeks
     curr_dates = cellfun(@(x) datetime(x,'InputFormat','dd/MM/uuuu'),curr_dates);   % Convert to datetime
@@ -53,20 +53,18 @@ for curr_r=1:length(d)
     X_cell{curr_r} = curr_X;
     Y_cell{curr_r} = curr_Y;
 
-    disp(curr_recording)
+    %disp(curr_recording)
 end
 
 % Combine cells to data matrices
 X = cell2mat(X_cell);
 Y = cell2mat(Y_cell);
 
-% Change the order of X to match the trained model
-
-order = [1,2,3,4,5,6,7,8,9,10];
-X = X(:,order);
+% Use only relevant features, in the correct order
+features = [17 23 11 20 19 21 18 16 10 8];
+X = X(:,features);
 
 % Load trained RUSboost model
-
 model_struct = load('RUSboost_model.mat');
 model = model_struct.final_model;
 
