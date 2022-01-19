@@ -11,6 +11,8 @@ performs feature selection for two different models (Random forest and RUSboost)
 Shows relevant graphs and confusion matrices,
 and saves the chosen model (RUSboost model) and the final confusion matrix on the test set to .mat files. 
 
+In order to save the trained model and the confusion matrix, remove the last lines from comment mode.
+
 ## main.m ## 
 This function recieves a path containing the data and labels files, 
 extracts the chosen best features from them,

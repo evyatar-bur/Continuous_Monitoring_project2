@@ -321,9 +321,9 @@ title('Confusion matrix - 90% PPV operating point')
 %% Create final model from all of the data
 final_model = fitcensemble(X_final,Y_event,'method','RUSBoost','NumLearningCycles',100,'Learners',t,'LearnRate',learning_rate);
 
-% Saving trained model
-save('RUSboost_model.mat','final_model')
-
-% Saving confusion matrix
-save('confusion_matrix.mat','rus_test_mat')
+% % Saving trained model
+% save('RUSboost_model.mat','final_model')
+% 
+% % Saving confusion matrix
+% save('confusion_matrix.mat','rus_test_mat')
 
