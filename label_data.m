@@ -1,5 +1,6 @@
 function [label_features] = label_data(recording,dates)
-    
+%This function gets all the data and the dates and extracts features from
+%the label files
     label_features = nan*zeros(size(dates,1),11);
     
     % Read label data to cell

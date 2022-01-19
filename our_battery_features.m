@@ -1,4 +1,5 @@
 function [mean_battery] = our_battery_features(battery,dates)
+%This function calculates relevant features from the battery sensor
 
 mean_battery = nan*zeros(1,length(dates));
 

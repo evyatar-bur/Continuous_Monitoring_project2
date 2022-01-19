@@ -1,4 +1,5 @@
 function [still,on_foot,tilting,vehicle] = our_activity_features(activity,dates)
+%This function calculates relevant features from the activity sensor
 
 still = nan*zeros(1,length(dates));
 on_foot = nan*zeros(1,length(dates));

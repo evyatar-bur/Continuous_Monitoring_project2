@@ -1,4 +1,5 @@
 function [call_count, call_duration] = our_call_features(calls,dates)
+%This function calculates relevant features from the call sensor
 
 call_count = zeros(length(dates),1);
 call_duration = call_count;

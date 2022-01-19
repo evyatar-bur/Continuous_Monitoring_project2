@@ -1,4 +1,5 @@
 function [mean_screen_usage,last_time,mean_screen_night] = our_screen_feature(screen_state,dates)
+%This function calculates relevant features from the screen sensor
 
 mean_screen_usage = nan*zeros(1,length(dates));
 mean_screen_night = nan*zeros(1,length(dates));

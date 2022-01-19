@@ -1,4 +1,6 @@
 function [features,dates] = record_data(recording)
+%This function gets all the data, saves only the relevant data from the sensors...
+% and returns features matrix 
 
 [~ , ~ , raw] = xlsread(recording);
 

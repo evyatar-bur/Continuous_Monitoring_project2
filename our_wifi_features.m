@@ -1,4 +1,5 @@
 function [mean_wifi] = our_wifi_features(wifi,dates)
+%This function calculates relevant features from the wifi sensor
 
 mean_wifi = zeros(1,length(dates));
 

@@ -1,5 +1,5 @@
 function [mean_light,mean_light_night] = our_light_features(light,dates)
-
+%This function calculates relevant features from the light sensor
 
 mean_light = nan*zeros(1,length(dates));
 mean_light_night = nan*zeros(1,length(dates));

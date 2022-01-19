@@ -1,6 +1,6 @@
 function [label] = label_classifier(dates)
 % label_classifier recieves a cell of dates and returns a label vector
-% 
+
 % label is a bolian vector,
 % determning for each date if it is a weekday or weekend
 

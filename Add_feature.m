@@ -1,5 +1,6 @@
 function [best_feature_list,best_score] = Add_feature(X_training,Y_training,best_feature_list,best_score,metric,model_type)
-% Add_features checks which feature needs to be added to get the best AUC
+% This function checks which feature needs to be added to get the best F1
+% score and returns the features list and the best scores
 
 rng('default')
 
