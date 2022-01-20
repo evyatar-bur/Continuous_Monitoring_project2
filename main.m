@@ -1,5 +1,6 @@
 function [confusion_matrix] = main(path)
 
+rng('default')
 
 % Save current directory
 currentFolder = pwd;
